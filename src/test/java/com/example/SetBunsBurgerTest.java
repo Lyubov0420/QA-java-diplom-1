@@ -6,36 +6,48 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import praktikum.Bun;
 import praktikum.Burger;
-import praktikum.Database;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(Parameterized.class)
 public class SetBunsBurgerTest {
-    private static final Database database = new Database();
     private Burger burger;
-    private final Bun bun;
+
+    @Parameterized.Parameter
+    public Bun testBun;
 
     @Before
     public void setUp() {
         burger = new Burger();
     }
 
-    public SetBunsBurgerTest(Bun bun) {
-        this.bun = bun;
-    }
+    @Parameterized.Parameters(name = "Тест булочки: {0}")
+    public static List<Bun> testBuns() {
+        Bun whiteBun = mock(Bun.class);
+        when(whiteBun.getName()).thenReturn("Белая булочка");
 
-    @Parameterized.Parameters(name = "Тестовые данные:{0}")
-    public static Object[][] data() {
-        return database.availableBuns()
-                .stream()
-                .map(bun -> new Object[]{bun})
-                .toArray(Object[][]::new);
+        Bun blackBun = mock(Bun.class);
+        when(blackBun.getName()).thenReturn("Черная булочка");
+
+        return Arrays.asList(whiteBun, blackBun);
     }
 
     @Test
-    public void testSetBuns() {
-        burger.setBuns(bun);
-        assertEquals("Ошибка при задании булочки", bun, burger.bun);
+    public void shouldSetBunInBurger() {
+        burger.setBuns(testBun);
+        assertNotNull("Булочка должна быть установлена", burger.bun);
+    }
+
+    @Test
+    public void shouldSetCorrectBun() {
+        burger.setBuns(testBun);
+        assertEquals("Должна быть установлена правильная булочка",
+                testBun, burger.bun);
     }
 }
