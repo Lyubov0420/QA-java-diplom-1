@@ -39,13 +39,13 @@ public class SetBunsBurgerTest {
     }
 
     @Test
-    public void shouldSetBunInBurger() {
+    public void setBunsShouldNotReturnNull() {
         burger.setBuns(testBun);
         assertNotNull("Булочка должна быть установлена", burger.bun);
     }
 
     @Test
-    public void shouldSetCorrectBun() {
+    public void setBunsShouldSetCorrectBun() {
         burger.setBuns(testBun);
         assertEquals("Должна быть установлена правильная булочка",
                 testBun, burger.bun);

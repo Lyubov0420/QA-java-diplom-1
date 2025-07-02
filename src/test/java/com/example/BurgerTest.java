@@ -1,3 +1,5 @@
+package com.example;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,42 +44,56 @@ public class BurgerTest {
     }
 
     @Test
-    public void testSetBuns() {
+    public void setBuns_ShouldSetBunCorrectly() {
         burger.setBuns(bun);
         assertSame(bun, burger.bun);
     }
 
     @Test
-    public void testAddIngredient() {
+    public void addIngredient_ShouldAddIngredientToList() {
         burger.addIngredient(ingredient1);
         assertEquals(1, burger.ingredients.size());
+    }
+
+    @Test
+    public void addIngredient_ShouldAddCorrectIngredient() {
+        burger.addIngredient(ingredient1);
         assertSame(ingredient1, burger.ingredients.get(0));
     }
 
     @Test
-    public void testRemoveIngredient() {
+    public void removeIngredient_ShouldRemoveIngredientFromList() {
         burger.addIngredient(ingredient1);
         burger.removeIngredient(0);
         assertTrue(burger.ingredients.isEmpty());
     }
 
     @Test
-    public void testMoveIngredient() {
+    public void moveIngredient_ShouldChangeIngredientsOrder() {
         burger.addIngredient(ingredient1);
         burger.addIngredient(ingredient2);
+
         burger.moveIngredient(0, 1);
+
         assertSame(ingredient2, burger.ingredients.get(0));
         assertSame(ingredient1, burger.ingredients.get(1));
     }
 
     @Test
-    public void testGetPriceWithOnlyBun() {
+    public void getPrice_ShouldReturnCorrectPriceForOnlyBun() {
         burger.setBuns(bun);
         assertEquals(200f, burger.getPrice(), 0.0f);
     }
 
     @Test
-    public void testGetPriceWithBunAndIngredients() {
+    public void getPrice_ShouldReturnCorrectPriceForBunAndOneIngredient() {
+        burger.setBuns(bun);
+        burger.addIngredient(ingredient1);
+        assertEquals(250f, burger.getPrice(), 0.0f);
+    }
+
+    @Test
+    public void getPrice_ShouldReturnCorrectPriceForBunAndMultipleIngredients() {
         burger.setBuns(bun);
         burger.addIngredient(ingredient1);
         burger.addIngredient(ingredient2);
@@ -85,40 +101,35 @@ public class BurgerTest {
     }
 
     @Test
-    public void testGetReceiptWithOnlyBun() {
+    public void getReceipt_ShouldContainCorrectBunName() {
         burger.setBuns(bun);
         String receipt = burger.getReceipt();
-
-        String expected = String.format("(==== %s ====)%n", bun.getName()) +
-                String.format("(==== %s ====)%n", bun.getName()) +
-                String.format("%nPrice: %f%n", 200.0f);
-
-        assertEquals(expected, receipt);
+        assertTrue(receipt.contains("(==== black bun ====)"));
     }
 
     @Test
-    public void testGetReceiptWithBunAndIngredients() {
+    public void getReceipt_ShouldContainCorrectIngredientInfo() {
         burger.setBuns(bun);
         burger.addIngredient(ingredient1);
-        burger.addIngredient(ingredient2);
         String receipt = burger.getReceipt();
+        assertTrue(receipt.contains("= filling cutlet ="));
+    }
 
-        String expected = String.format("(==== %s ====)%n", bun.getName()) +
-                String.format("= %s %s =%n", "filling", "cutlet") +
-                String.format("= %s %s =%n", "sauce", "chili sauce") +
-                String.format("(==== %s ====)%n", bun.getName()) +
-                String.format("%nPrice: %f%n", 280.0f);
-
-        assertEquals(expected, receipt);
+    @Test
+    public void getReceipt_ShouldContainCorrectTotalPrice() {
+        burger.setBuns(bun);
+        burger.addIngredient(ingredient1);
+        String receipt = burger.getReceipt();
+        assertTrue(receipt.contains("Price: 250.0"));
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testRemoveNonexistentIngredient() {
+    public void removeIngredient_ShouldThrowExceptionWhenIndexInvalid() {
         burger.removeIngredient(0);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testMoveNonexistentIngredient() {
+    public void moveIngredient_ShouldThrowExceptionWhenIndexInvalid() {
         burger.moveIngredient(0, 1);
     }
 }

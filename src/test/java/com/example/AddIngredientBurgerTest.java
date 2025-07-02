@@ -47,16 +47,17 @@ public class AddIngredientBurgerTest {
     }
 
     @Test
-    public void shouldAddIngredientToBurger() {
+    public void addIngredientShouldContainAddedIngredient() {
         burger.addIngredient(testIngredient);
-        assertTrue("Ингредиент должен быть добавлен в бургер",
+        assertTrue("Ингредиент должен присутствовать в бургере",
                 burger.ingredients.contains(testIngredient));
     }
 
     @Test
-    public void shouldAddIngredientToCorrectPosition() {
+    public void addIngredientShouldAddToEndOfList() {
         burger.addIngredient(testIngredient);
-        assertEquals("Ингредиент должен быть добавлен в конец списка",
-                0, burger.ingredients.indexOf(testIngredient));
+        int lastIndex = burger.ingredients.size() - 1;
+        assertEquals("Ингредиент должен добавляться в конец списка",
+                testIngredient, burger.ingredients.get(lastIndex));
     }
 }
